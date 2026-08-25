@@ -31,4 +31,14 @@ public class HealthEndpointTests : IClassFixture<WebApplicationFactory<Program>>
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
+
+    [Fact]
+public async Task Info_WhenRequested_ReturnsOk()
+{
+    var client = _factory.CreateClient();
+
+    var response = await client.GetAsync("/info");
+
+    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+}
 }

@@ -1,7 +1,13 @@
 @host = http://localhost:5001
 
-### Root - returns a small JSON object
+### Root - Viral Panic status
 GET {{host}}/
 
 ### Health - should always return 200 OK
 GET {{host}}/health
+
+### Info - which instance answered the request
+GET {{host}}/info
+
+### Panic - current panic level
+GET {{host}}/panic
