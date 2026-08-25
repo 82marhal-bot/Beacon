@@ -12,7 +12,7 @@ Jag valde att bygga Viral Panic eftersom idén med en tjänst som plötsligt gå
 
 ## Driftincident
 
-- 001 Fel tenant ID: I ett tidigare skolprojekt hade jag loggat in med min klasskompis tenant-ID vilket skapade problem när jag skulle skapa upp en webapp via Bash. Problemet löstes genom att logga in med min egen tenant-ID; **az login --tenant** ...
+- **001 Fel tenant ID**: I ett tidigare skolprojekt hade jag loggat in med min klasskompis tenant-ID vilket skapade problem när jag skulle skapa upp en webapp via Bash. Problemet löstes genom att logga in med min egen tenant-ID; **az login --tenant** ...
 
 
 
