@@ -11,18 +11,20 @@ Projektets fokus ligger därför på driftsättning, skalbarhet och molninfrastr
 ## Så kör du den lokalt
 
 Projektet kräver .NET 10 SDK.
+Kommandona i detta kapitel är skrivna för Bash.
 
-**Bygg lösningen:**
+### Bygg lösningen
 
 ```bash
 dotnet build
 ```
-**Kör tester:**
+### Kör tester
 
 ```bash
 dotnet test
 ```
-**Starta applikationen**
+### Starta applikationen
+
 ```bash
 dotnet run --project src/Beacon.Api
 ```
@@ -33,7 +35,8 @@ Applikationen är då tillgänglig på:
 - http://localhost:5001/info
 - http://localhost:5001/panic
 
-**För att köra med HTTPS-profilen:**
+### För att köra med HTTPS-profilen
+
 ```bash
 dotnet run --project src/Beacon.Api --launch-profile https
 ```
@@ -41,6 +44,8 @@ dotnet run --project src/Beacon.Api --launch-profile https
 Applikationen lyssnar då även på `https://localhost:7001`.
 
 ## Driftsättning till App Service
+
+Kommandona i detta kapitel är skrivna för Bash.
 
 ### Skapa resursgrupp
 
