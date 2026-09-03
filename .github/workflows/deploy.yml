@@ -1,3 +1,50 @@
+name: Build and deploy to App Service
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+  workflow_dispatch:
+
+env:
+  # PLATSHÅLLARE - byt 1 och 2 här. 3 finns längre ned i filen
+  AZURE_WEBAPP_NAME: app-clo25-namn                        # <- 1. Name
+  AZURE_WEBAPP_HOSTNAME: app-clo25-namn.azurewebsites.net  # <- 2. Address
+  DOTNET_VERSION: '10.0.x'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v7
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Build
+        run: dotnet build --configuration Release
+
+      - name: Run tests
+        run: dotnet test --configuration Release --no-build
+
+      - name: Publish the app
+        run: |
+          # 3. Sökvägen till DITT projekt - måste vara en .csproj
+          dotnet publish ./src/Beacon.Api/Beacon.Api.csproj \
+            --configuration Release \
+            --output artifacts/publish
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: app
+          path: artifacts/publish
+          
   deploy:
     needs: build
     runs-on: ubuntu-latest
