@@ -9,9 +9,8 @@ on:
   workflow_dispatch:
 
 env:
-  # PLATSHÅLLARE - byt 1 och 2 här. 3 finns längre ned i filen
-  AZURE_WEBAPP_NAME: app-clo25-namn                        # <- 1. Name
-  AZURE_WEBAPP_HOSTNAME: app-clo25-namn.azurewebsites.net  # <- 2. Address
+  AZURE_WEBAPP_NAME: app-clo25-martina                      
+  AZURE_WEBAPP_HOSTNAME: app-clo25-martina.azurewebsites.net  
   DOTNET_VERSION: '10.0.x'
 
 jobs:
@@ -34,7 +33,6 @@ jobs:
 
       - name: Publish the app
         run: |
-          # 3. Sökvägen till DITT projekt - måste vara en .csproj
           dotnet publish ./src/Beacon.Api/Beacon.Api.csproj \
             --configuration Release \
             --output artifacts/publish
