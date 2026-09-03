@@ -161,3 +161,45 @@ Prisjämförelsen gjordes för Sweden Central, medan resurserna i laborationen d
 *Priserna kontrollerades i augusti 2026 och används som uppskattningar för arkitekturjämförelsen*
 
 Tre B1-instanser kostade vid jämförelsetillfället cirka 39.42 USD/månad, jämfört med 64.97 USD/månad för en P1v3-instans. För Viral Panic prioriterade jag i detta skede flera instanser eftersom de gör det möjligt att demonstrera lastbalansering och redundans, medan funktionerna i Premium V3 inte var nödvändiga för den här delen av lösningen.
+
+
+
+
+Name               Address
+-----------------  -----------------------------------
+app-clo25-martina  app-clo25-martina.azurewebsites.net
+
+
+az resource update \
+  --resource-group rg-clo25-martina \
+  --namespace Microsoft.Web \
+  --resource-type basicPublishingCredentialsPolicies \
+  --name scm \
+  --parent sites/app-clo25-martina \
+  --set properties.allow=true \
+  --query "properties" \
+  --output json
+
+az webapp deployment list-publishing-profiles \
+  --name app-clo25-martina \
+  --resource-group rg-clo25-martina \
+  --xml > publish-profile.xml
+
+gh secret set AZURE_WEBAPP_PUBLISH_PROFILE < publish-profile.xml
+gh secret list
+
+az webapp config appsettings set \
+  --resource-group rg-clo25-martina \
+  --name app-clo25-martina \
+  --settings SCM_DO_BUILD_DURING_DEPLOYMENT=false \
+  --output none
+
+az webapp config appsettings list \
+  --resource-group rg-clo25-martina \
+  --name app-clo25-martina \
+  --query "[?name=='SCM_DO_BUILD_DURING_DEPLOYMENT'].{Name:name, Value:value}" \
+  --output table
+
+Name                            Value
+------------------------------  -------
+SCM_DO_BUILD_DURING_DEPLOYMENT  false

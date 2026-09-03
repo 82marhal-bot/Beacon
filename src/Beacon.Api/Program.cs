@@ -21,8 +21,8 @@ app.MapGet("/info", () => new
 
 app.MapGet("/panic", () => new
 {
-    level = "CALM",
-    message = "Everything is suspiciously fine.",
+    level = "SUSPICIOUS",
+    message = "CI/CD has entered the building 👀",
     timestamp = DateTimeOffset.UtcNow
 });
 
