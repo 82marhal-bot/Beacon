@@ -39,6 +39,9 @@ jobs:
   infra-preview:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - name: Check out the code
         uses: actions/checkout@v7
@@ -50,8 +53,20 @@ jobs:
 
       - name: Preview the infrastructure changes
         run: |
+          set -o pipefail
           chmod +x ./scripts/deploy-infra.sh
-          ./scripts/deploy-infra.sh --what-if "${{ env.AZURE_RESOURCE_GROUP }}"
+          ./scripts/deploy-infra.sh --what-if "${{ env.AZURE_RESOURCE_GROUP }}" | tee whatif.txt
+
+      - name: Comment the preview on the pull request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          {
+            echo '### Förhandsgranskning av infrastrukturen'
+            echo
+            sed 's/^/    /' whatif.txt
+          } > comment.md
+          gh pr comment "${{ github.event.pull_request.number }}" --body-file comment.md
 
   build:
     runs-on: ubuntu-latest
