@@ -482,3 +482,6 @@ $RECYCLE.BIN/
 *.swp
 publish-profile.xml
 *.publishsettings
+infra/*.json
+infra/*.json
+azure-credentials.json
