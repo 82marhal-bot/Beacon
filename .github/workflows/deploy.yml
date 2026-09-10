@@ -11,9 +11,27 @@ on:
 env:
   AZURE_WEBAPP_NAME: app-clo25-martina                      
   AZURE_WEBAPP_HOSTNAME: app-clo25-martina.azurewebsites.net  
+  AZURE_RESOURCE_GROUP: rg-clo25-martina
   DOTNET_VERSION: '10.0.x'
 
 jobs:
+
+  infra:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v7
+
+      - name: Sign in to Azure
+        uses: azure/login@v3
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy the infrastructure
+        run: |
+          chmod +x ./scripts/deploy-infra.sh
+          ./scripts/deploy-infra.sh "${{ env.AZURE_RESOURCE_GROUP }}"
+
   build:
     runs-on: ubuntu-latest
     steps:
@@ -44,7 +62,7 @@ jobs:
           path: artifacts/publish
           
   deploy:
-    needs: build
+    needs: [build, infra]
     runs-on: ubuntu-latest
     steps:
       - name: Check out the code (needed for the script)
