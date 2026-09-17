@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Viral Panic Command Center</title>
+
+    <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+
+    <div class="app-shell">
+
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">VIRAL PANIC</p>
+                <h1>Command Center</h1>
+            </div>
+
+            <div class="system-badge">
+                <span class="status-dot"></span>
+                System online
+            </div>
+        </header>
+
+        <main class="dashboard">
+
+            <section class="sture-panel">
+                <img
+                    id="sture"
+                    src="/images/sture-calm.png"
+                    alt="Sture, Viral Panic mascot">
+
+                <div class="panic-copy">
+                    <p class="label">Panic level</p>
+                    <h2 id="panic-level">Loading...</h2>
+                    <p id="panic-message">Loading...</p>
+                </div>
+            </section>
+
+            <section class="status-panel">
+
+                <article class="status-card">
+                    <p class="label">System health</p>
+                    <p id="health-status" class="status-value">
+                        Loading...
+                    </p>
+                </article>
+
+                <article class="status-card">
+                    <p class="label">Current instance</p>
+                    <p id="instance-name" class="status-value">
+                        Loading...
+                    </p>
+                </article>
+
+                <article class="status-card">
+                    <p class="label">Last updated</p>
+                    <p id="last-updated" class="status-value">
+                        Waiting...
+                    </p>
+                </article>
+
+            </section>
+
+        </main>
+
+        <footer class="footer">
+            Everything is suspiciously fine.
+        </footer>
+
+    </div>
+
+    <script src="/js/site.js"></script>
+</body>
+</html>

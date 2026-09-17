@@ -10,8 +10,16 @@ Projektets fokus ligger därför på driftsättning, skalbarhet och molninfrastr
 
 ## Så kör du den lokalt
 
-Projektet kräver .NET 10 SDK.
-Kommandona i detta kapitel är skrivna för Bash.
+*Kommandona i detta kapitel är skrivna för Bash.*
+
+Projektet kräver .NET 10 SDK, GitHub CLI och Git
+För att kontrollera att detta finns skriv in dessa kommandon i terminalen: 
+
+```bash
+dotnet --list-sdks
+git --version
+gh --version
+```
 
 ### Bygg lösningen
 
@@ -43,9 +51,29 @@ dotnet run --project src/Beacon.Api --launch-profile https
 
 Applikationen lyssnar då även på `https://localhost:7001`.
 
-## Driftsättning till App Service
+## Driftsättning till App Service 
 
-Kommandona i detta kapitel är skrivna för Bash.
+*Kommandona i detta kapitel är skrivna för Bash.*
+
+Projektet kräver .NET 10 SDK, GitHub CLI och Git
+För att kontrollera att detta finns skriv in dessa kommandon i terminalen: 
+
+```bash
+dotnet --list-sdks
+git --version
+gh --version
+```
+
+Du behöver även vara inloggad på Azure CLI och ha en aktiv prenumration. Kontrollera att du är inloggad: 
+
+```bash
+az account show --output table
+```
+Om du får ett felmeddelande; Logga in genom: 
+
+```bash
+az login
+```
 
 ### Skapa resursgrupp
 
@@ -76,16 +104,6 @@ az webapp create \
   --runtime "DOTNETCORE:10.0"
   ```
 
-### Skala ut till 2 instanser
-
-```bash
-az appservice plan update \
-  --name app-clo25-martina \
-  --resource-group rg-clo25-martina \
-  --number-of-workers 2
-  ```
-
-
 ### Innan driftsättning
 
 az webapp deploy vill ha en .zip-fil, så att appen ska byggas och packas innan den skickas upp. Denna packning görs i projektfilen Beacon.Api.csproj. Om det inte redan finns i projektfilen, lägg till detta före </Project>:
@@ -103,6 +121,11 @@ az webapp deploy vill ha en .zip-fil, så att appen ska byggas och packas innan 
 
 ```bash
 dotnet publish src/Beacon.Api --configuration Release --output artifacts/publish
+```
+*Kontrollera att -zip-filen (app.zip) finns innan driftsättning:*
+
+```bash
+ls artifacts/
 ```
 
 ### Driftsätt webapp
@@ -128,7 +151,70 @@ och
 curl https://app-clo25-martina.azurewebsites.net/panic
 ```
 
+### Slå på basic auth
+
+```bash
+az resource update \
+  --resource-group rg-clo25-martina \
+  --namespace Microsoft.Web \
+  --resource-type basicPublishingCredentialsPolicies \
+  --name scm \
+  --parent sites/app-clo25-martina \
+  --set properties.allow=true
+
+az webapp deployment list-publishing-profiles \
+  --name app-clo25-martina \
+  --resource-group rg-clo25-martina \
+  --xml > publish-profile.xml
+
+gh secret set AZURE_WEBAPP_PUBLISH_PROFILE < publish-profile.xml
+rm publish-profile.xml
+
+```
+
+-----
+
+### Skala ut till 2 instanser
+
+```bash
+az appservice plan update \
+  --name app-clo25-martina \
+  --resource-group rg-clo25-martina \
+  --number-of-workers 2
+  ```
+
+## Driftsättningsstrategi
+
+Jag använder en automatiserad driftsättningsstrategi med GitHub Actions där applikationen byggs, testas och publiceras innan den driftsätts till Azure App Service. deploy är beroende av att build lyckas, vilket gör att kod som inte går att bygga eller som har misslyckade tester inte driftsätts.
+Efter driftsättningen körs även ett health check mot applikationens /health-endpoint för att verifiera att den nya versionen faktiskt är tillgänglig och svarar korrekt.
+
+Strategin passar Viral Panic eftersom applikationen är liten och stateless och därför inte kräver en mer avancerad driftsättningsstrategi i nuläget. En enkel automatiserad deployment ger en tydlig och reproducerbar process samtidigt som risken för manuella fel minskar.
+
+### Först Build sen Deploy
+
+Pipelinen består av två jobs: build och deploy. Först körs build, där koden checkas ut från repot, rätt version av .NET installeras, applikationen byggs och testerna körs. Därefter publiceras applikationen till mappen artifacts/publish, och resultatet laddas upp som en artifact med namnet app.
+När build har lyckats startar deploy. Det styrs av raden needs: build, som gör att deployment-jobbet väntar tills build-jobbet är klart och bara fortsätter om det har lyckats. På så sätt deployas inte kod som inte går att bygga eller som har misslyckade tester.
+
+I deploy checkas koden ut igen eftersom jobbet körs separat och behöver tillgång till bland annat health-check.sh. Artifacten från build laddas sedan ner och deployas till Azure App Service med hjälp av publish-profilen som ligger lagrad i GitHub Secrets. Efter deployment körs health-check.sh mot appens /health-endpoint för att verifiera att applikationen faktiskt svarar med HTTP 200.
+Ordningen blir alltså: checkout → setup .NET → build → test → publish → upload artifact → download artifact → deploy → health check. Syftet är att verifiera koden innan den driftsätts *(Går koden att bygga och klarar den testerna?)* och sedan även verifiera att den fungerar efter deployment *(Svarar den verkliga appen i Azure?)*.
+
+### Smoke test
+
+Mitt health-check.sh är ett smoke test som körs efter driftsättningen. Scriptet skickar HTTP-anrop till applikationens /health-endpoint och kontrollerar att servern svarar med statuskod 200 OK, vilket betyder att anropet kunde behandlas framgångsrikt. Om appen inte svarar direkt gör scriptet flera försök med fem sekunders mellanrum, eftersom applikationen kan behöva tid att starta efter en driftsättning.
+
+Smoke-testet är värdefullt utöver pipelinens vanliga deployment-status eftersom en lyckad deployment endast visar att driftsättningssteget lyckades. Det garanterar inte att den nya versionen av applikationen faktiskt har startat och kan svara på HTTP-anrop. Health checken verifierar därför den driftsatta applikationen efter deployment. Om /health aldrig svarar med 200 avslutas scriptet med exit-kod 1, vilket gör att steget i pipelinen markeras som misslyckat.
+
+### Autentiering mot Azure
+
+Autentiseringen mot Azure sker med hjälp av en publish profile för App Service. Publish-profilen innehåller känsliga autentiseringsuppgifter och lagras därför som GitHub-secreten AZURE_WEBAPP_PUBLISH_PROFILE. I workflow-filen refereras secreten med ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }} och används av azure/webapps-deploy vid driftsättningen.
+
+Hemligheten ligger inte direkt i koden eftersom kod och workflow-filer versionshanteras och pushas till GitHub. Om autentiseringsuppgifterna hårdkodades skulle de kunna exponeras i repot och dess Git-historik. Genom att separera hemligheter från koden minskar risken att känsliga uppgifter läcker och obehöriga får möjlighet att använda dem för att komma åt eller driftsätta till Azure.
+
 ## Beslut jag tagit
+
+### Val av projektnamn
+
+När jag började bygga upp projektet gav jag det namnet som var föreslaget i uppgiften (Beacon). Någon vecka in bestämde jag mig för att kalla projektet för Viral Panic. Jag valde ändå att låta projektnamnet vara Beacon för att minska risken för att förstöra flöden om jag skulle ändra namespaces och annat. Det är ändå inget som syns om någon skulle besöka min applikation. 
 
 ### Val av app-idé
 
@@ -139,6 +225,16 @@ Jag valde att bygga Viral Panic eftersom idén med en tjänst som plötsligt gå
 Jag övervägde både B1 och P1v3. P1v3 ger tillgång till funktioner som autoscale, deployment slots och VNet-integration, men för Viral Panic valde jag i det här steget flera B1-instanser eftersom syftet främst är att demonstrera lastbalansering och tillgänglighet till lägre kostnad. Med tre B1-instanser finns redundans på instansnivå, vilket innebär att applikationen fortfarande har tillgängliga instanser som kan hantera trafik om en eller två instanser blir otillgängliga.
 
 Jag valde dock att skala ut App Service-planen till två B1-instanser som grundläge. Det ger bättre tillgänglighet än en ensam instans, eftersom applikationen fortfarande kan hantera trafik om en instans blir otillgänglig. Tre instanser kan vara ett rimligt nästa steg vid högre belastning, men i detta skede bedömde jag att två instanser gav en bättre balans mellan kostnad och redundans.
+
+### Rolling deployment, blue/green eller canary?
+
+Driftsättningen sker direkt till den befintliga App Service-instansen och använder alltså inte exempelvis blue/green- eller canary-deployment. För en liten applikation som Viral Panic är den enklare strategin tillräcklig i detta skede. För en mer verksamhetskritisk applikation hade exempelvis deployment slots och blue/green deployment kunnat minska risken vid nya releaser genom att den nya versionen verifieras innan trafiken flyttas över.
+
+### Hantering av autentiseringsuppgifter
+För deployment till Azure App Service används en publish profile som lagras i GitHub Secrets. Publish-profilen lagras inte i repot eftersom den innehåller känsliga autentiseringsuppgifter.
+För att förenkla uppdateringen av denna secret har jag skapat scriptet scripts/refresh-secret.sh. Scriptet tar App Service-namn och resursgrupp som argument, hämtar en aktuell publish profile från Azure och uppdaterar AZURE_WEBAPP_PUBLISH_PROFILE i GitHub Secrets. Den tillfälliga lokala filen tas bort även om något steg i scriptet misslyckas.
+
+Scriptet körs inte som en del av varje deployment. Det används istället vid behov, exempelvis om resurserna har skapats på nytt eller autentiseringsuppgifterna behöver uppdateras. Den vanliga CI/CD-pipelinen använder därefter den secret som redan finns lagrad i GitHub.
 
 ## Driftincident
 
@@ -163,43 +259,8 @@ Prisjämförelsen gjordes för Sweden Central, medan resurserna i laborationen d
 Tre B1-instanser kostade vid jämförelsetillfället cirka 39.42 USD/månad, jämfört med 64.97 USD/månad för en P1v3-instans. För Viral Panic prioriterade jag i detta skede flera instanser eftersom de gör det möjligt att demonstrera lastbalansering och redundans, medan funktionerna i Premium V3 inte var nödvändiga för den här delen av lösningen.
 
 
+Resursgrupp: rg-clo25-martina
+Registernamn: acrclo25martina
+Miljönamn: cae-clo25-martina
+Containerapp-namn: ca-clo25-martina
 
-
-Name               Address
------------------  -----------------------------------
-app-clo25-martina  app-clo25-martina.azurewebsites.net
-
-
-az resource update \
-  --resource-group rg-clo25-martina \
-  --namespace Microsoft.Web \
-  --resource-type basicPublishingCredentialsPolicies \
-  --name scm \
-  --parent sites/app-clo25-martina \
-  --set properties.allow=true \
-  --query "properties" \
-  --output json
-
-az webapp deployment list-publishing-profiles \
-  --name app-clo25-martina \
-  --resource-group rg-clo25-martina \
-  --xml > publish-profile.xml
-
-gh secret set AZURE_WEBAPP_PUBLISH_PROFILE < publish-profile.xml
-gh secret list
-
-az webapp config appsettings set \
-  --resource-group rg-clo25-martina \
-  --name app-clo25-martina \
-  --settings SCM_DO_BUILD_DURING_DEPLOYMENT=false \
-  --output none
-
-az webapp config appsettings list \
-  --resource-group rg-clo25-martina \
-  --name app-clo25-martina \
-  --query "[?name=='SCM_DO_BUILD_DURING_DEPLOYMENT'].{Name:name, Value:value}" \
-  --output table
-
-Name                            Value
-------------------------------  -------
-SCM_DO_BUILD_DURING_DEPLOYMENT  false

@@ -1,0 +1,293 @@
+/* ---------- Base ---------- */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    background: #08111f;
+    color: #e8f0f7;
+
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* ---------- App shell ---------- */
+
+.app-shell {
+    width: min(1200px, 92%);
+    margin: 0 auto;
+    padding: 32px 0;
+}
+
+
+/* ---------- Top bar ---------- */
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding-bottom: 24px;
+    border-bottom: 1px solid #26364a;
+}
+
+.topbar h1 {
+    margin: 0;
+    font-size: 2.5rem;
+}
+
+.eyebrow {
+    margin: 0 0 6px;
+
+    font-size: 0.8rem;
+    font-weight: bold;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.system-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    color: var(--accent);
+
+    padding: 8px 12px;
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.status-dot {
+    width: 9px;
+    height: 9px;
+
+    background: var(--accent);
+    box-shadow: 0 0 14px var(--accent);
+    border-radius: 50%;
+}
+
+
+/* ---------- Dashboard ---------- */
+
+.dashboard {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 24px;
+
+    margin-top: 24px;
+}
+
+
+/* ---------- Sture ---------- */
+
+.sture-panel {
+    min-height: 600px;
+    padding: 32px;
+
+    background: #101c2c;
+    border: 1px solid #26364a;
+    border-radius: 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    box-shadow:
+        0 0 0 1px var(--accent-soft),
+        0 0 40px var(--accent-soft);
+}
+
+#sture {
+    display: block;
+
+    width: 100%;
+    max-width: 420px;
+    max-height: 430px;
+
+    object-fit: contain;
+}
+
+.panic-copy {
+    margin-top: 20px;
+}
+
+#panic-level {
+    margin: 4px 0 8px;
+    color: var(--accent);
+
+    font-size: 2.5rem;
+    letter-spacing: 0.06em;
+}
+
+#panic-message {
+    margin: 0;
+    color: #aab8c7;
+}
+
+
+/* ---------- Status cards ---------- */
+
+.status-panel {
+    display: grid;
+    gap: 24px;
+}
+
+.status-card {
+    padding: 28px;
+
+    background: #101c2c;
+    border: 1px solid var(--accent-soft);
+    border-radius: 20px;
+}
+
+.label {
+    margin: 0 0 10px;
+
+    color: #8294a8;
+
+    font-size: 0.75rem;
+    font-weight: bold;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.status-value {
+    margin: 0;
+
+    font-family: monospace;
+    font-size: 1.3rem;
+}
+
+
+/* ---------- Footer ---------- */
+
+.footer {
+    margin-top: 24px;
+    padding: 18px;
+
+    border-top: 1px solid #26364a;
+
+    color: #8294a8;
+
+    text-align: center;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+/* ---------- Dynamic panic states ---------- */
+
+.state-calm {
+    --accent: #54e38e;
+    --accent-soft: rgba(84, 227, 142, 0.15);
+}
+
+.state-suspicious {
+    --accent: #f6c453;
+    --accent-soft: rgba(246, 196, 83, 0.15);
+}
+
+.state-elevated {
+    --accent: #ff9f43;
+    --accent-soft: rgba(255, 159, 67, 0.16);
+}
+
+.state-panic {
+    --accent: #ff5c5c;
+    --accent-soft: rgba(255, 92, 92, 0.18);
+}
+
+.state-viral {
+    --accent: #ff2d55;
+    --accent-soft: rgba(255, 45, 85, 0.22);
+}
+
+.state-error {
+    --accent: #ff4d4d;
+    --accent-soft: rgba(255, 77, 77, 0.20);
+}
+
+.state-panic .sture-panel {
+    animation: panic-pulse 1.6s infinite;
+}
+
+.state-viral .sture-panel {
+    animation: panic-pulse 0.8s infinite;
+}
+
+@keyframes panic-pulse {
+    0%,
+    100% {
+        box-shadow:
+            0 0 0 1px var(--accent-soft),
+            0 0 30px var(--accent-soft);
+    }
+
+    50% {
+        box-shadow:
+            0 0 0 1px var(--accent),
+            0 0 60px var(--accent-soft);
+    }
+}
+
+
+/* ---------- Small screens ---------- */
+
+@media (max-width: 750px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    .topbar {
+        align-items: flex-start;
+        gap: 20px;
+        flex-direction: column;
+    }
+
+    .sture-panel {
+        min-height: auto;
+    }
+
+    /* ---------- Dynamic panic states ---------- */
+
+.state-calm {
+    --accent: #54e38e;
+    --accent-soft: rgba(84, 227, 142, 0.15);
+}
+
+.state-suspicious {
+    --accent: #f6c453;
+    --accent-soft: rgba(246, 196, 83, 0.15);
+}
+
+.state-elevated {
+    --accent: #ff9f43;
+    --accent-soft: rgba(255, 159, 67, 0.16);
+}
+
+.state-panic {
+    --accent: #ff5c5c;
+    --accent-soft: rgba(255, 92, 92, 0.18);
+}
+
+.state-viral {
+    --accent: #ff2d55;
+    --accent-soft: rgba(255, 45, 85, 0.22);
+}
+
+.state-error {
+    --accent: #ff4d4d;
+    --accent-soft: rgba(255, 77, 77, 0.20);
+}
+}

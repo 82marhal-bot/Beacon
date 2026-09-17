@@ -2,7 +2,7 @@
 
 En liten webbapp som byggs vidare på under kursen Skalbara molnapplikationer.
 
-![src/images/Panic-rabbit.png](/src/images/Panic-rabbit.png)
+![src/images/sture-calm.png](/src/images/sture-calm.png)
 
 *Viral Panic* är ett enkelt API som simulerar en tjänst som plötsligt kan få en kraftig trafikökning. Tanken är att appen ska representera en liten webbtjänst som på kort tid blir mer belastad än vanligt, till exempel efter att en kampanj, nyhet eller länk sprids snabbt.
 
