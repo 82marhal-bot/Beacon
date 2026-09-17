@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# Deploys the infrastructure for the web app track (plan + web app).
-# Run from the repo root.
-# Usage: ./scripts/deploy-infra.sh [--what-if] <resource-group> [parameter-file]
+# Deploys the infrastructure for the container track
+# (Container Apps environment + container app). Run from the repo root.
+# Requires the registry to exist and the image to be pushed.
+# Usage: ./scripts/deploy-container.sh [--what-if] <resource-group> [parameter-file]
 # With --what-if the deployment is only previewed. No resources change; the
 # resource group itself is still created if missing, because what-if needs it.
 
@@ -16,19 +17,16 @@ if [ "${1:-}" = "--what-if" ]; then
 fi
 
 RESOURCE_GROUP="${1:?Provide the resource group as the first argument}"
-PARAM_FILE="${2:-infra/main.bicepparam}"
+PARAM_FILE="${2:-infra/container.bicepparam}"
 LOCATION="${LOCATION:-westeurope}"
-SP_NAME="${SP_NAME:-sp-clo25-martina}"
-TEMPLATE="infra/main.bicep"
+TEMPLATE="infra/container.bicep"
 
 echo "Template:       $TEMPLATE"
 echo "Parameters:     $PARAM_FILE"
 echo "Resource group: $RESOURCE_GROUP"
 
-# The resource group is torn down at the end of every lesson day, so it is usually
-# missing when this script runs. Creating it here is what makes one command enough.
-# Note: this happens with --what-if too, because what-if also needs the group to
-# exist. An empty resource group costs nothing.
+# Came along with the copy from deploy-infra.sh, and it belongs here too: the
+# group is gone after every teardown.
 if [ "$(az group exists --name "$RESOURCE_GROUP")" = "false" ]; then
   echo "Group:          missing, creating it in $LOCATION"
   az group create --name "$RESOURCE_GROUP" --location "$LOCATION" --output none
