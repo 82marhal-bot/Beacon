@@ -241,6 +241,53 @@ body {
     }
 }
 
+.request-button {
+    margin-top: 20px;
+    padding: 10px 16px;
+
+    background: transparent;
+    color: var(--accent);
+
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+
+    font: inherit;
+    font-size: 0.8rem;
+    font-weight: bold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+
+    cursor: pointer;
+}
+
+.request-button:hover {
+    background: var(--accent-soft);
+}
+
+.replica-list {
+    margin: 12px 0 0;
+    color: #8294a8;
+    font-family: monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+
+.new-replica {
+    animation: new-replica-flash 0.4s ease-in-out 3;
+}
+
+@keyframes new-replica-flash {
+    0%, 100% {
+        transform: scale(1);
+        border-color: var(--accent-soft);
+    }
+
+    50% {
+        transform: scale(1.03);
+        border-color: var(--accent);
+        box-shadow: 0 0 30px var(--accent);
+    }
+}
 
 /* ---------- Small screens ---------- */
 
@@ -258,36 +305,4 @@ body {
     .sture-panel {
         min-height: auto;
     }
-
-    /* ---------- Dynamic panic states ---------- */
-
-.state-calm {
-    --accent: #54e38e;
-    --accent-soft: rgba(84, 227, 142, 0.15);
-}
-
-.state-suspicious {
-    --accent: #f6c453;
-    --accent-soft: rgba(246, 196, 83, 0.15);
-}
-
-.state-elevated {
-    --accent: #ff9f43;
-    --accent-soft: rgba(255, 159, 67, 0.16);
-}
-
-.state-panic {
-    --accent: #ff5c5c;
-    --accent-soft: rgba(255, 92, 92, 0.18);
-}
-
-.state-viral {
-    --accent: #ff2d55;
-    --accent-soft: rgba(255, 45, 85, 0.22);
-}
-
-.state-error {
-    --accent: #ff4d4d;
-    --accent-soft: rgba(255, 77, 77, 0.20);
-}
 }

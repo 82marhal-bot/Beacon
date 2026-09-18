@@ -50,9 +50,11 @@
 
                 <article class="status-card">
                     <p class="label">Current instance</p>
-                    <p id="instance-name" class="status-value">
-                        Loading...
-                    </p>
+                    <p id="instance-name" class="status-value">Loading...</p>
+
+                    <button id="send-request-button" class="request-button">
+                        Send request
+                    </button>
                 </article>
 
                 <article class="status-card">
@@ -61,6 +63,19 @@
                         Waiting...
                     </p>
                 </article>
+
+                <article class="status-card">
+                    <p class="label">Instance changes</p>
+                    <p id="instance-changes" class="status-value">0</p>
+                </article>
+
+                <article id="replica-card" class="status-card">
+                    <p class="label">Observed replicas</p>
+                    <p id="replica-count" class="status-value">0</p>
+                    <p id="replica-list" class="replica-list">
+                        Waiting for Sture...
+                    </p>
+                    </article>
 
             </section>
 
