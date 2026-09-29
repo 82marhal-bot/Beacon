@@ -2,6 +2,10 @@ let previousInstance = null;
 let instanceChanges = 0;
 const observedInstances = new Set();
 
+// Preload the error-state mascot while the app is available.
+const weatherSture = new Image();
+weatherSture.src = "/images/sture-weather.png";
+
 function updateInstance(machineName) {
     const isNewReplica = !observedInstances.has(machineName);
 
@@ -95,7 +99,10 @@ async function loadDashboard() {
 
         const panic = await panicResponse.json();
 
+        document.getElementById("system-status").textContent = "System online";
         document.getElementById("health-status").textContent = health.status;
+        document.getElementById("footer-status").textContent =
+            "Everything is suspiciously fine.";
 
         updateInstance(info.machine);
         updatePanic(panic.level, panic.message);
@@ -105,7 +112,7 @@ async function loadDashboard() {
         document.getElementById("last-updated").textContent =
             now.toLocaleTimeString();
     }
-    
+
     catch (error) {
         console.error("Failed to update dashboard:", error);
 
@@ -119,7 +126,11 @@ async function loadDashboard() {
         document.body.classList.add("state-error");
 
         document.getElementById("sture").src =
-            "/images/sture-panic.png";
+            "/images/sture-weather.png";
+
+        document.getElementById("system-status").textContent = "System offline";
+        document.getElementById("footer-status").textContent =
+            "Everything is suspiciously NOT fine.";
 
         document.getElementById("last-updated").textContent =
             new Date().toLocaleTimeString();
