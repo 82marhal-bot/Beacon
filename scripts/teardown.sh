@@ -6,14 +6,6 @@
 
 set -euo pipefail
 
-# Read the optional flag first, then drop it, so the arguments below keep their
-# positions whether or not it was given.
-WHAT_IF=false
-if [ "${1:-}" = "--what-if" ]; then
-  WHAT_IF=true
-  shift
-fi
-
 RESOURCE_GROUP="${1:?Provide the resource group as the first argument}"
 
 if [ "$(az group exists --name "$RESOURCE_GROUP")" != "true" ]; then

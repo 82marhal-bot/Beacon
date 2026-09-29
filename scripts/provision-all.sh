@@ -17,11 +17,10 @@ echo "== 1/4 App Service track: group, plan, web app =="
 ./scripts/deploy-infra.sh "$RESOURCE_GROUP"
 
 echo "== 2/4 Registry: it has to exist before an image can be pushed =="
-# infra/container.bicep declares the registry AND the container app in one
-# file (see del 2) - and the app needs an image that does not exist yet at
-# this point. So the registry is created directly here, once, ahead of the
-# real deployment in step 4. That deployment sees the same registry already
-# there, unchanged, and only adds the environment and the app.
+# infra/container.bicep declares both the registry and the container app,
+# but the app needs an image that does not exist yet after a teardown.
+# Create the registry first so the image can be built and pushed before
+# the full container infrastructure is deployed in step 4.
 az acr create \
   --resource-group "$RESOURCE_GROUP" \
   --name "$ACR_NAME" \
@@ -29,7 +28,7 @@ az acr create \
   --admin-enabled true \
   --output none
 
-echo "== 3/4 Image: the registry was torn down, so the image went with it =="
+echo "== 3/4 Image: build and push the initial image =="
 az acr build \
   --registry "$ACR_NAME" \
   --image "beacon:$IMAGE_TAG" \

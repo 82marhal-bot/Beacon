@@ -25,8 +25,7 @@ echo "Template:       $TEMPLATE"
 echo "Parameters:     $PARAM_FILE"
 echo "Resource group: $RESOURCE_GROUP"
 
-# Came along with the copy from deploy-infra.sh, and it belongs here too: the
-# group is gone after every teardown.
+# Create the resource group if it does not exist.
 if [ "$(az group exists --name "$RESOURCE_GROUP")" = "false" ]; then
   echo "Group:          missing, creating it in $LOCATION"
   az group create --name "$RESOURCE_GROUP" --location "$LOCATION" --output none
@@ -43,7 +42,7 @@ if [ "$WHAT_IF" = true ]; then
   exit 0
 fi
 
-DEPLOYMENT_NAME="webapp-$(date +%Y%m%d-%H%M%S)"
+DEPLOYMENT_NAME="containerapp-$(date +%Y%m%d-%H%M%S)"
 echo "Mode:           deploy ($DEPLOYMENT_NAME)"
 
 APP_URL=$(az deployment group create \

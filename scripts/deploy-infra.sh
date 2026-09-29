@@ -18,17 +18,14 @@ fi
 RESOURCE_GROUP="${1:?Provide the resource group as the first argument}"
 PARAM_FILE="${2:-infra/main.bicepparam}"
 LOCATION="${LOCATION:-westeurope}"
-SP_NAME="${SP_NAME:-sp-clo25-martina}"
 TEMPLATE="infra/main.bicep"
 
 echo "Template:       $TEMPLATE"
 echo "Parameters:     $PARAM_FILE"
 echo "Resource group: $RESOURCE_GROUP"
 
-# The resource group is torn down at the end of every lesson day, so it is usually
-# missing when this script runs. Creating it here is what makes one command enough.
-# Note: this happens with --what-if too, because what-if also needs the group to
-# exist. An empty resource group costs nothing.
+# Create the resource group if it does not exist.
+# This also happens with --what-if because the preview requires the group to exist.
 if [ "$(az group exists --name "$RESOURCE_GROUP")" = "false" ]; then
   echo "Group:          missing, creating it in $LOCATION"
   az group create --name "$RESOURCE_GROUP" --location "$LOCATION" --output none
