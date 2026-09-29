@@ -1,8 +1,5 @@
 // Infrastructure for the container track: registry, Container Apps
-// environment, and the container app. Two logical parts, one file for now -
-// the optional module track after this lab splits it into
-// infra/modules/registry.bicep and infra/modules/container-app.bicep, and
-// these section dividers go with it.
+// environment, and the container app.
 
 @description('Region. Defaults to the location of the resource group. Shared by both parts below.')
 param location string = resourceGroup().location
@@ -66,7 +63,7 @@ param concurrentRequests int = 20
 ])
 param containerCpu string = '0.5'
 
-@description('Memory per replica. Must match the CPU value per the table above.')
+@description('Memory allocated per replica.Must use a supported CPU and memory combination.')
 @allowed([
   '0.5Gi'
   '1.0Gi'
@@ -77,7 +74,7 @@ param containerMemory string = '1.0Gi'
 
 // ======== Container App ========
 
-// Same for everyone in the class, so a variable rather than a parameter.
+// Internal secret name used for the ACR password in Container Apps.
 var registryPasswordSecretName = 'acr-password'
 
 // Reads from `app` below - Bicep resolves this by dependency, not by the
@@ -93,9 +90,8 @@ resource acr 'Microsoft.ContainerRegistry/registries@2025-11-01' = {
     name: registrySku
   }
   properties: {
-    // Turns on a username and password for the registry, so the container app
-    // can pull the image. A deliberate trade-off - write it up in TUTORIAL.md.
-    // The better way (managed identity + AcrPull) comes in week 40.
+    // Enables registry credentials so the container app can pull the image.
+    // Managed identity with AcrPull would avoid storing ACR admin credentials.
     adminUserEnabled: true
   }
 }

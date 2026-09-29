@@ -1,10 +1,10 @@
 // Infrastructure for the web app track: App Service plan + web app.
-// Deployed into an existing resource group with az deployment proup create. 
+// Deployed into an existing resource group with az deployment group create. 
 
 @description('Name of the web app. Part of the URL, must be globally unique.')
 param appName string
 
-@description('Name of the App Service plan. It already exists, so pass its name')
+@description('Name of the App Service plan.')
 param planName string
 
 @description('Region. Defaults to the location of the resource group.')
@@ -17,7 +17,7 @@ param location string = resourceGroup().location
 ])
 param skuName string = 'B1'
 
-@description('Number of instances to run. B1 allowes maximum of 3.')
+@description('Number of App Service instances to run.')
 @minValue(1)
 @maxValue(3)
 param instanceCount int = 2
@@ -41,6 +41,9 @@ resource plan 'Microsoft.Web/serverfarms@2023-12-01' = {
 resource app 'Microsoft.Web/sites@2023-12-01' = {
   name: appName
   location: location
+  identity: {
+    type: 'SystemAssigned'
+  }
   kind: 'app,linux'
   properties: {
     serverFarmId: plan.id
