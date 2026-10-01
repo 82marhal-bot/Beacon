@@ -969,6 +969,9 @@ När CI/CD-flödet senare byggdes ut till att även provisionera infrastrukturen
 Publish profile används därför inte längre av den nuvarande App Service-workflowen. AZURE_CREDENTIALS är i stället den autentiseringslösning som används av GitHub Actions mot Azure.
 Container Apps-spåret har dessutom en separat autentiseringsrelation. Container Appen behöver kunna hämta sin privata image från ACR. I den nuvarande lösningen används ACR:s admin-användare och ett lösenord som lagras som en secret i Container Appen. För projektets omfattning är detta en enkel lösning, men en möjlig förbättring är att använda managed identity tillsammans med rollen AcrPull, vilket skulle minska behovet av att hantera ACR:s admin-credentials.
 
+AZURE_CREDENTIALS behålls tills OIDC bevisats över en rivning,
+inte bara över en push.
+
 ### Serverless, datalagring och caching
 
 Jag har även övervägt om Viral Panic skulle ha nytta av serverless-funktioner, persistent datalagring, caching eller CDN. I den nuvarande lösningen har jag valt att inte lägga till dessa tjänster eftersom applikationen inte har något behov som motiverar dem.
