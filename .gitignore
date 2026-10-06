@@ -485,3 +485,5 @@ publish-profile.xml
 infra/*.json
 infra/*.json
 azure-credentials.json
+
+.azure/
