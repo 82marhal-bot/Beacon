@@ -36,7 +36,7 @@ jobs:
       - name: Deploy the infrastructure
         run: |
           chmod +x ./scripts/deploy-infra.sh
-          ./scripts/deploy-infra.sh "${{ env.AZURE_RESOURCE_GROUP }}" infra/main.premium.bicepparam
+          ./scripts/deploy-infra.sh "${{ env.AZURE_RESOURCE_GROUP }}" infra/main.bicepparam
 
   build:
     runs-on: ubuntu-latest

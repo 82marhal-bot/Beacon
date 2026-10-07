@@ -45,30 +45,37 @@ function updatePanic(level, message) {
     document.getElementById("panic-message").textContent = message;
 
     const sture = document.getElementById("sture");
+    const footer = document.getElementById("footer-status");
 
     switch (level) {
         case "CALM":
             sture.src = "/images/sture-calm.png";
+            footer.textContent = "Everything is suspiciously fine.";
             break;
 
         case "SUSPICIOUS":
             sture.src = "/images/sture-suspicious-v2.png";
+            footer.textContent = "Something feels suspicious.";
             break;
 
         case "ELEVATED":
             sture.src = "/images/sture-elevated-v3.png";
+            footer.textContent = "Sture is monitoring the situation.";
             break;
 
         case "PANIC":
             sture.src = "/images/sture-panic-v3.png";
+            footer.textContent = "Everything is definitely NOT fine.";
             break;
 
         case "VIRAL":
             sture.src = "/images/sture-viral.png";
+            footer.textContent = "There is no containing Sture now.";
             break;
 
         default:
             sture.src = "/images/sture-calm.png";
+            footer.textContent = "Status unknown.";
             break;
     }
 }
@@ -101,8 +108,6 @@ async function loadDashboard() {
 
         document.getElementById("system-status").textContent = "System online";
         document.getElementById("health-status").textContent = health.status;
-        document.getElementById("footer-status").textContent =
-            "Everything is suspiciously fine.";
 
         updateInstance(info.machine);
         updatePanic(panic.level, panic.message);
