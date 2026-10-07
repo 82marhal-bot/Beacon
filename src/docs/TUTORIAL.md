@@ -867,7 +867,8 @@ Autentisering och auktorisering har olika funktioner. OIDC verifierar vilken ide
 
 ### OIDC vid fullständig återuppbyggnad
 
-Vid en fullständig återuppbyggnad behöver först rätt Azure-subscription väljas. GitHub Actions autentiserar sig med OIDC, men den federerade identiteten behöver också ha rätt Azure-behörigheter. Eftersom rollen Contributor är tilldelad på resursgruppens scope försvinner rolltilldelningen när resursgruppen tas bort. Resursgruppen behöver därför först återskapas och OIDC-identiteten åter få rollen Contributor innan GitHub Actions kan provisionera och driftsätta resurser där.
+Vid en fullständig återuppbyggnad behöver först rätt Azure-subscription väljas. GitHub Actions autentiserar sig med OIDC, men den federerade identiteten behöver också ha rätt Azure-behörigheter. Eftersom rollen Contributor är tilldelad på resursgruppens scope försvinner rolltilldelningen när resursgruppen tas bort.
+Scriptet `scripts/bootstrap-azure.sh` körs därför lokalt innan resten av infrastrukturen provisioneras. Det skapar resursgruppen om den saknas och återställer OIDC-identitetens Contributor-roll på resursgruppens scope. `scripts/provision-all.sh` kör bootstrap-scriptet som sitt första steg, så att GitHub Actions åter har behörighet till resursgruppen efter en fullständig teardown.
 
 ### Key Vault och managed identity
 
