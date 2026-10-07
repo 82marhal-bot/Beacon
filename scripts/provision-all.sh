@@ -13,14 +13,17 @@ RESOURCE_GROUP="${1:?Provide the resource group as the first argument}"
 ACR_NAME="${2:?Provide your ACR name as the second argument}"
 IMAGE_TAG="${3:-v1}"
 
-echo "== 1/4 App Service track: group, plan, web app =="
+echo "== 1/5 Azure bootstrap: resource group and OIDC role =="
+./scripts/bootstrap-azure.sh "$RESOURCE_GROUP"
+
+echo "== 2/5 App Service track: plan and web app =="
 ./scripts/deploy-infra.sh "$RESOURCE_GROUP"
 
-echo "== 2/4 Registry: it has to exist before an image can be pushed =="
+echo "== 3/5 Registry: it has to exist before an image can be pushed =="
 # infra/container.bicep declares both the registry and the container app,
 # but the app needs an image that does not exist yet after a teardown.
 # Create the registry first so the image can be built and pushed before
-# the full container infrastructure is deployed in step 4.
+# the full container infrastructure is deployed in step 5.
 az acr create \
   --resource-group "$RESOURCE_GROUP" \
   --name "$ACR_NAME" \
@@ -28,14 +31,14 @@ az acr create \
   --admin-enabled true \
   --output none
 
-echo "== 3/4 Image: build and push the initial image =="
+echo "== 4/5 Image: build and push the initial image =="
 az acr build \
   --registry "$ACR_NAME" \
   --image "beacon:$IMAGE_TAG" \
   --file src/Beacon.Api/Dockerfile \
   .
 
-echo "== 4/4 Container track: registry (already there), environment and container app =="
+echo "== 5/5 Container track: registry (already there), environment and container app =="
 ./scripts/deploy-container.sh "$RESOURCE_GROUP"
 
 echo
