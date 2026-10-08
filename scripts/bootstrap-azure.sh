@@ -15,6 +15,7 @@ LOCATION="${LOCATION:-westeurope}"
 
 # GitHub Actions OIDC identity.
 AZURE_CLIENT_ID="1ef9ae43-39b6-4c73-bc21-2f84676424d8"
+AZURE_OBJECT_ID="b5f79a96-d6ca-420b-9945-2e801619d953"
 
 echo "== Azure bootstrap =="
 
