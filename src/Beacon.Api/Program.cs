@@ -1,4 +1,6 @@
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.ConfigureHttpJsonOptions(options =>
+    options.SerializerOptions.WriteIndented = true);
 var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();
@@ -20,6 +22,13 @@ app.MapGet("/panic", () => new
     level = "SUSPICIOUS",
     message = "CI/CD has entered the building 👀",
     timestamp = DateTimeOffset.UtcNow
+});
+
+app.MapGet("/version", () => new
+{
+    app = "Beacon",
+    status = "ok",
+    version = "2"
 });
 
 app.Run();
