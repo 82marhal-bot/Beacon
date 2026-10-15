@@ -12,9 +12,11 @@ spec:
       labels:
         app: beacon
     spec:
+      imagePullSecrets:
+        - name: ghcr-secret
       containers:
         - name: beacon
-          image: beacon:v3
+          image: ghcr.io/82marhal-bot/beacon:f5288f4
           ports:
             - containerPort: 8080
           envFrom:
