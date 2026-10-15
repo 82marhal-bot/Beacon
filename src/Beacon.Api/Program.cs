@@ -13,8 +13,11 @@ app.MapGet("/health", () => Results.Ok(new
 
 app.MapGet("/info", () => new
 {
-    app = "Viral Panic",
-    machine = Environment.MachineName
+    app = "Beacon",
+    machine = Environment.MachineName,
+    environment = Environment.GetEnvironmentVariable("BEACON_ENVIRONMENT") ?? "unset",
+    message = Environment.GetEnvironmentVariable("BEACON_MESSAGE") ?? "unset",
+    apiKeySet = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("BEACON_API_KEY"))
 });
 
 app.MapGet("/panic", () => new
@@ -28,7 +31,7 @@ app.MapGet("/version", () => new
 {
     app = "Beacon",
     status = "ok",
-    version = "2"
+    version = "3"
 });
 
 app.Run();
