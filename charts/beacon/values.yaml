@@ -1,0 +1,3 @@
+replicaCount: 3
+imageTag: "9087ef1"
+ingressHost: ""
