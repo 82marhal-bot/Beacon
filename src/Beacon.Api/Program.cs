@@ -31,7 +31,7 @@ app.MapGet("/version", () => new
 {
     app = "Beacon",
     status = "ok",
-    version = "5"
+    version = "6"
 });
 
 app.Run();
