@@ -12,8 +12,6 @@ spec:
       labels:
         app: {{ .Release.Name }}
     spec:
-      imagePullSecrets:
-        - name: ghcr-secret
       containers:
         - name: {{ .Release.Name }}
           image: "ghcr.io/82marhal-bot/beacon:{{ .Values.imageTag }}"
