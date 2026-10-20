@@ -101,3 +101,5 @@ GitHub Actions workflows are disabled in this portfolio repository to prevent un
    ```bash
    helm upgrade --install beacon ./charts/beacon
    ```
+
+   A green run of the pipeline: [Release version 5](https://github.com/82marhal-bot/Beacon/actions/runs/39404994021)
