@@ -80,6 +80,20 @@ function updatePanic(level, message) {
     }
 }
 
+function updateDeployment(info, version) {
+    document.getElementById("app-version").textContent =
+        `v${version.version ?? "unknown"}`;
+
+    document.getElementById("app-environment").textContent =
+        info.environment ?? "unknown";
+
+    document.getElementById("config-message").textContent =
+        info.message ?? "Not configured";
+
+    document.getElementById("api-key-status").textContent =
+        info.apiKeySet ? "YES ✓" : "NO";
+}
+
 async function loadDashboard() {
     try {
         const healthResponse = await fetch("/health");
@@ -98,6 +112,17 @@ async function loadDashboard() {
 
         const info = await infoResponse.json();
 
+        const versionResponse = await fetch("/version");
+
+if (!versionResponse.ok) {
+    throw new Error(
+        `Version request failed: ${versionResponse.status}`
+    );
+}
+
+const version = await versionResponse.json();
+
+
         const panicResponse = await fetch("/panic");
 
         if (!panicResponse.ok) {
@@ -110,6 +135,7 @@ async function loadDashboard() {
         document.getElementById("health-status").textContent = health.status;
 
         updateInstance(info.machine);
+        updateDeployment(info, version);
         updatePanic(panic.level, panic.message);
 
         const now = new Date();

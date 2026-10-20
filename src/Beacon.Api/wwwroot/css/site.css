@@ -5,6 +5,9 @@
 }
 
 body {
+    --accent: #54e38e;
+    --accent-soft: rgba(84, 227, 142, 0.15);
+
     margin: 0;
     min-height: 100vh;
 
@@ -289,6 +292,34 @@ body {
     }
 }
 
+/* ---------- Deployment information ---------- */
+
+.deployment-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 16px;
+    margin-top: 20px;
+}
+
+.deployment-grid > div {
+    min-width: 0;
+}
+
+.deployment-grid .status-value,
+.deployment-detail {
+    overflow-wrap: anywhere;
+}
+
+.deployment-detail {
+    margin: 0;
+    color: #e8f0f7;
+    font-family: monospace;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+
+
 /* ---------- Small screens ---------- */
 
 @media (max-width: 750px) {
@@ -304,5 +335,11 @@ body {
 
     .sture-panel {
         min-height: auto;
+    }
+}
+
+@media (max-width: 420px) {
+    .deployment-grid {
+        grid-template-columns: 1fr;
     }
 }
