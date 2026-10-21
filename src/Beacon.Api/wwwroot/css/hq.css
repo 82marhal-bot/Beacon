@@ -1,0 +1,120 @@
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #08111f;
+}
+
+.hq {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+}
+
+.hq-image {
+    display: block;
+    width: 100%;
+    max-width: 1600px;
+    height: auto;
+}
+
+
+.office {
+    position: relative;
+    width: 100%;
+    max-width: 1600px;
+}
+
+.hotspot {
+    position: absolute;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    border-radius: 12px;
+}
+
+.hotspot-sture {
+    left: 5%;
+    top: 30%;
+    width: 26%;
+    height: 48%;
+}
+
+
+.hotspot-bosse {
+    left: 19%;
+    top: 74%;
+    width: 12%;
+    height: 18%;
+}
+
+.hotspot-gunnar {
+    left: 38%;
+    top: 34%;
+    width: 23%;
+    height: 45%;
+}
+
+.hotspot-majvor {
+    left: 72%;
+    top: 30%;
+    width: 23%;
+    height: 48%;
+}
+
+.hotspot:hover {
+    background: rgba(101, 217, 186, 0.12);
+}
+
+.hotspot:focus-visible {
+    outline: 3px solid #65d9ba;
+    outline-offset: 2px;
+}
+
+
+.speech-bubble {
+    display: none;
+    position: absolute;
+
+    left: 24%;
+    top: 67%;
+
+    max-width: 220px;
+    padding: 12px 16px;
+
+    background: #fff8e8;
+    color: #243047;
+    border: 2px solid #e9c98d;
+    border-radius: 16px;
+
+    font-family: sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    z-index: 10;
+}
+
+.speech-bubble.visible {
+    display: block;
+}
+
+.speech-bubble-sture {
+    left: 14%;
+    top: 22%;
+}
+
+.speech-bubble-gunnar {
+    left: 46%;
+    top: 24%;
+}
+
+.speech-bubble-majvor {
+    left: 65%;
+    top: 21%;
+}
