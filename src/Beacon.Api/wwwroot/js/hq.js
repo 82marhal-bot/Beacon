@@ -66,3 +66,7 @@ function showPengwinMessage(pengwin) {
         bubble.classList.remove("visible");
     }, 3000);
 }
+
+function pressPanicButton() {
+    alert("🚨 PANIC BUTTON ACTIVATED! 🚨\n\nMajvor: GUNNAR!!!");
+}
