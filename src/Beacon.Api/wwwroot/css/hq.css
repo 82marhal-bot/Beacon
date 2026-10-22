@@ -159,6 +159,52 @@ transition:
     animation: panic-flash 0.5s ease-in-out 3;
 }
 
+/* ---------- Live system status ---------- */
+
+.hq-system-status {
+    position: absolute;
+    left: 3%;
+    bottom: 4%;
+    z-index: 5;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 12px 16px;
+
+    background: rgba(9, 13, 32, 0.9);
+    color: #edf0ff;
+
+    border: 1px solid #a78bfa;
+    border-radius: 12px;
+
+    box-shadow: 0 0 20px rgba(167, 139, 250, 0.25);
+
+    font-family: monospace;
+    font-size: 0.85rem;
+}
+
+.hq-status-dot {
+    width: 10px;
+    height: 10px;
+    flex-shrink: 0;
+
+    background: #f6c453;
+    border-radius: 50%;
+    box-shadow: 0 0 12px #f6c453;
+}
+
+.hq-system-status.online .hq-status-dot {
+    background: #54e38e;
+    box-shadow: 0 0 12px #54e38e;
+}
+
+.hq-system-status.offline .hq-status-dot {
+    background: #ff5c5c;
+    box-shadow: 0 0 12px #ff5c5c;
+}
+
 @keyframes panic-flash {
     0%, 100% {
         opacity: 0;

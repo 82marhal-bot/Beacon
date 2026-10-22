@@ -57,7 +57,7 @@ function showPengwinMessage(pengwin) {
 
     // Uppdatera texten och visa bubblan.
     bubble.classList.remove("panic-shout");
-bubble.textContent = lines[randomIndex];
+    bubble.textContent = lines[randomIndex];
     bubble.classList.add("visible");
 
     // Starta om just denna pingvins timer.
@@ -130,3 +130,41 @@ function pressPanicButton() {
         office.classList.remove("panic-active");
     }, 3000);
 }
+
+async function updateHqStatus() {
+    const statusBox = document.querySelector(".hq-system-status");
+    const statusText = document.getElementById("hq-status-text");
+
+    try {
+        const response = await fetch("/health");
+
+        if (!response.ok) {
+            throw new Error(`Health check failed: ${response.status}`);
+        }
+
+        const health = await response.json();
+
+        // Vi kräver ett giltigt hälsostatusvärde,
+        // inte bara ett lyckat HTTP-anrop.
+        if (health.status?.toLowerCase() !== "healthy") {
+            throw new Error(`Unhealthy status: ${health.status}`);
+        }
+
+        statusBox.classList.remove("offline");
+        statusBox.classList.add("online");
+
+        statusText.textContent = "Beacon Online";
+    }
+    catch (error) {
+        console.error("HQ health check failed:", error);
+
+        statusBox.classList.remove("online");
+        statusBox.classList.add("offline");
+
+        statusText.textContent = "Beacon Offline";
+    }
+}
+
+updateHqStatus();
+
+setInterval(updateHqStatus, 5000);

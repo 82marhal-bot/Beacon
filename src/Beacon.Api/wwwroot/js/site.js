@@ -1,10 +1,38 @@
 let previousInstance = null;
 let instanceChanges = 0;
+let previousHealth = null;
+let previousPanicLevel = null;
 const observedInstances = new Set();
 
 // Preload the error-state mascot while the app is available.
 const weatherSture = new Image();
 weatherSture.src = "/images/sture-weather.png";
+
+const MAX_LOG_EVENTS = 30; // Behåll din befintliga rad!
+
+function addLogEvent(message, type = "info") {
+    const log = document.getElementById("event-log");
+
+    const emptyMessage = log.querySelector(".event-empty");
+
+    if (emptyMessage) {
+        emptyMessage.remove();
+    }
+
+    const event = document.createElement("li");
+    const time = new Date().toLocaleTimeString("sv-SE");
+
+    event.textContent = `${time} · ${message}`;
+
+    // Lägg till en CSS-klass för händelsens typ
+    event.classList.add(`event-${type}`);
+
+    log.prepend(event);
+
+    while (log.children.length > MAX_LOG_EVENTS) {
+        log.lastElementChild.remove();
+    }
+}
 
 function updateInstance(machineName) {
     const isNewReplica = !observedInstances.has(machineName);
@@ -17,6 +45,11 @@ function updateInstance(machineName) {
     document.getElementById("replica-list").textContent =
         [...observedInstances].join(" • ");
 
+    // Logga när en ny instans upptäcks
+    if (isNewReplica) {
+        addLogEvent(`New instance detected: ${machineName}`, "instance");
+    }
+
     if (isNewReplica && observedInstances.size > 1) {
         const replicaCard = document.getElementById("replica-card");
 
@@ -27,8 +60,14 @@ function updateInstance(machineName) {
         }, 1200);
     }
 
+    // Logga när trafiken hamnar på en annan instans
     if (previousInstance !== null && previousInstance !== machineName) {
         instanceChanges++;
+
+        addLogEvent(
+            `Instance changed: ${previousInstance} → ${machineName}`,
+            "instance"
+        );
     }
 
     previousInstance = machineName;
@@ -38,6 +77,29 @@ function updateInstance(machineName) {
 }
 
 function updatePanic(level, message) {
+    // Logga bara när paniknivån förändras
+    if (level !== previousPanicLevel) {
+        const type =
+            level === "CALM" ? "success" :
+            level === "SUSPICIOUS" ? "warning" :
+            level === "ELEVATED" ? "warning" :
+            level === "PANIC" ? "error" :
+            level === "VIRAL" ? "error" :
+            "info";
+
+        if (previousPanicLevel === null) {
+            addLogEvent("Initial panic level: " + level, type);
+        } else {
+            addLogEvent(
+                "Panic level changed: " +
+                previousPanicLevel + " → " + level,
+                type
+            );
+        }
+
+        previousPanicLevel = level;
+    }
+
     document.body.className = "";
     document.body.classList.add(`state-${level.toLowerCase()}`);
 
@@ -114,13 +176,13 @@ async function loadDashboard() {
 
         const versionResponse = await fetch("/version");
 
-if (!versionResponse.ok) {
-    throw new Error(
-        `Version request failed: ${versionResponse.status}`
-    );
-}
+        if (!versionResponse.ok) {
+            throw new Error(
+                `Version request failed: ${versionResponse.status}`
+            );
+        }
 
-const version = await versionResponse.json();
+        const version = await versionResponse.json();
 
 
         const panicResponse = await fetch("/panic");
@@ -133,6 +195,10 @@ const version = await versionResponse.json();
 
         document.getElementById("system-status").textContent = "System online";
         document.getElementById("health-status").textContent = health.status;
+        if (health.status !== previousHealth) {
+            addLogEvent(`System health: ${health.status}`, "success");
+            previousHealth = health.status;
+        }
 
         updateInstance(info.machine);
         updateDeployment(info, version);
@@ -146,6 +212,12 @@ const version = await versionResponse.json();
 
     catch (error) {
         console.error("Failed to update dashboard:", error);
+
+        // Logga bara när systemet blir otillgängligt
+        if (previousHealth !== "UNAVAILABLE") {
+            addLogEvent("System health: UNAVAILABLE", "error");
+            previousHealth = "UNAVAILABLE";
+        }
 
         document.getElementById("health-status").textContent = "UNAVAILABLE";
         document.getElementById("instance-name").textContent = "UNKNOWN";
@@ -189,6 +261,8 @@ async function sendInstanceRequest() {
         document.getElementById("instance-name").textContent = "UNKNOWN";
     }
 }
+
+addLogEvent("Monitoring started", "info");
 
 loadDashboard();
 

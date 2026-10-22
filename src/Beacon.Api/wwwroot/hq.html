@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="sv">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,88 +9,59 @@
 </head>
 
 <body>
-    
-<main class="hq">
-    <div class="office">
-        <img
-            src="/images/the-office.png"
-            alt="Pengwin HQ med Sture, Gunnar, Majvor och Bosse"
-            class="hq-image"
-        >
 
-<a
-    class="hotspot hotspot-monitor"
-    href="/index.html"
-    aria-label="Öppna Beacon Dashboard">
-</a>
-        
-<button
-    class="hotspot hotspot-sture"
-    type="button"
-    aria-label="Prata med Sture"
-    onclick="showPengwinMessage('sture')"
-></button>
+    <main class="hq">
+        <div class="office">
+            <img src="/images/the-office.png" alt="Pengwin HQ med Sture, Gunnar, Majvor och Bosse" class="hq-image">
 
-<div id="sture-message" class="speech-bubble speech-bubble-sture" role="status">
-    Vem stör min kaffeövervakning?! ☕
-</div>
+            <a class="hotspot hotspot-monitor" href="/index.html" aria-label="Öppna Beacon Dashboard">
+            </a>
+
+            <button class="hotspot hotspot-sture" type="button" aria-label="Prata med Sture"
+                onclick="showPengwinMessage('sture')"></button>
+
+            <div id="sture-message" class="speech-bubble speech-bubble-sture" role="status">
+                Vem stör min kaffeövervakning?! ☕
+            </div>
 
 
-<button
-    class="hotspot hotspot-bosse"
-    type="button"
-    aria-label="Prata med Bosse"
-    onclick="showPengwinMessage('bosse')"
-></button>
+            <button class="hotspot hotspot-bosse" type="button" aria-label="Prata med Bosse"
+                onclick="showPengwinMessage('bosse')"></button>
 
-<div id="bosse-message" class="speech-bubble" role="status">
-    Zzz... deployment approved... zzz... 💤
-</div>
+            <div id="bosse-message" class="speech-bubble" role="status">
+                Zzz... deployment approved... zzz... 💤
+            </div>
 
 
-<button
-    class="hotspot hotspot-gunnar"
-    type="button"
-    aria-label="Prata med Gunnar"
-    onclick="showPengwinMessage('gunnar')"
-></button>
+            <button class="hotspot hotspot-gunnar" type="button" aria-label="Prata med Gunnar"
+                onclick="showPengwinMessage('gunnar')"></button>
 
-<div
-    id="gunnar-message"
-    class="speech-bubble speech-bubble-gunnar"
-    role="status"
->
-    JAG HAR EN IDÉ!!! 🚀
-</div>
+            <div id="gunnar-message" class="speech-bubble speech-bubble-gunnar" role="status">
+                JAG HAR EN IDÉ!!! 🚀
+            </div>
 
-<button
-    class="hotspot hotspot-panic"
-    type="button"
-    aria-label="Tryck på den stora röda knappen"
-    onclick="pressPanicButton()"
-></button>
+            <button class="hotspot hotspot-panic" type="button" aria-label="Tryck på den stora röda knappen"
+                onclick="pressPanicButton()"></button>
 
-<button
-    class="hotspot hotspot-majvor"
-    type="button"
-    aria-label="Prata med Majvor"
-    onclick="showPengwinMessage('majvor')"
-></button>
+            <button class="hotspot hotspot-majvor" type="button" aria-label="Prata med Majvor"
+                onclick="showPengwinMessage('majvor')"></button>
 
-<div
-    id="majvor-message"
-    class="speech-bubble speech-bubble-majvor"
-    role="status"
->
-    Har du läst loggarna? ☕
-</div>
+            <div id="majvor-message" class="speech-bubble speech-bubble-majvor" role="status">
+                Har du läst loggarna? ☕
+            </div>
+
+            <div class="hq-system-status" role="status">
+                <span id="hq-status-dot" class="hq-status-dot"></span>
+                <span id="hq-status-text">Checking Beacon...</span>
+            </div>
 
 
 
-    </div>
-</main>
+        </div>
+    </main>
 
-<script src="/js/hq.js"></script>
+    <script src="/js/hq.js"></script>
 
 </body>
+
 </html>

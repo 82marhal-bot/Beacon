@@ -29,7 +29,9 @@
 
         <main class="dashboard">
 
-            <section class="sture-panel">
+    <div class="dashboard-left">
+
+        <section class="sture-panel">
                 <img
                     id="sture"
                     src="/images/sture-calm.png"
@@ -41,6 +43,21 @@
                     <p id="panic-message">Loading...</p>
                 </div>
             </section>
+
+                    <section class="event-panel">
+            <div class="event-header">
+                <h2>📋 Event Log</h2>
+                <span class="event-live">● LIVE</span>
+            </div>
+
+            <ul id="event-log" class="event-log" aria-live="polite">
+                <li class="event-empty">
+                    Waiting for suspicious activity...
+                </li>
+            </ul>
+        </section>
+
+    </div>
 
             <section class="status-panel">
 
