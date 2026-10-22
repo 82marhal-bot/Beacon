@@ -37,6 +37,14 @@ body {
     border-radius: 12px;
 }
 
+.hotspot-monitor {
+    left: 25%;
+    top: 12%;
+    width: 57%;
+    height: 23%;
+    cursor: pointer;
+}
+
 .hotspot-sture {
     left: 5%;
     top: 30%;
