@@ -1,22 +1,29 @@
-# 🐧 Viral Panic
+# 🐧 Meet PengWin HQ
 
-**A small application built to explore big traffic spikes, cloud infrastructure, and scalability in Azure.**
+Viral Panic has grown beyond its original dashboard into a small interactive penguin office.
+
+## Meet the team
+
+- **Sture** – Chief Suspicion Officer. Trusts coffee more than green status indicators.
+- **Gunnar** – Enthusiastic idea generator. Should not be left alone with large red buttons.
+- **Majvor** – The experienced problem-solver. Always asks whether you've checked the logs.
+- **Bosse** – Chief Napping Officer. Occasionally approves deployments in his sleep.
+
+The separate PengWin HQ page (/hq.html) features clickable characters with randomly selected dialogue, individual speech bubbles, and automatic message timers.
+The original Viral Panic dashboard remains focused on API status and simulated panic levels.
+PengWin HQ is an evolving frontend experiment, built to practice HTML, CSS, JavaScript, and interactive UI development alongside the cloud infrastructure project.
 
 <p align="center">
-  <img src="src/Beacon.Api/wwwroot/images/sture-calm.png" alt="Sture, the Viral Panic penguin mascot" width="320">
+  <img src="src/Beacon.Api/wwwroot/images/the-office.png" alt="The Viral Panic office" width="320">
 </p>
-
-*Meet Sture. He's trying to stay calm while traffic spikes and cloud infrastructure does its thing.*
 
 ## About the project
 
-Viral Panic is a web application built with **C# and ASP.NET Core (.NET 10)**. It represents a small service that might suddenly experience a significant increase in traffic, for example when a campaign, news story, or shared link goes viral.
+*Viral Panic* is a web application built with **C# and ASP.NET Core (.NET 10)**. It represents a small service that might suddenly experience a significant increase in traffic, for example when a campaign, news story, or shared link goes viral. *PengWin HQ* is an exciting continuation of that project.
 
-The application is intentionally simple, with a small API and an interactive interface where Sture reacts to simulated panic levels.
+The main focus is not complex application logic, but **cloud infrastructure, automated deployment, and kubernetes**.
 
-The main focus is not complex application logic, but **cloud infrastructure, automated deployment, and scalability**.
-
-This project was developed as part of the *Scalable Cloud Applications* course.
+Viral Panic was originally developed as part of the *Scalable Cloud Applications* course and later expanded during the *Kubernetes* course, including container orchestration, Helm deployments, and Pengwin HQ.
 
 ## Tech stack
 
@@ -28,8 +35,10 @@ This project was developed as part of the *Scalable Cloud Applications* course.
 - **Bicep** – Infrastructure as Code
 - **GitHub Actions** – CI/CD pipelines
 - **OIDC and Azure Key Vault** – authentication, identity, and secrets management
+- **Kubernetes** – container orchestration
+- **Helm** – packaging and deploying the application to Kubernetes
 
-## One application, two deployment approaches
+## Azure deployment approaches
 
 The same application is deployed using two different Azure services.
 
@@ -52,6 +61,9 @@ This project gave me hands-on experience with:
 - Working with scaling, load balancing, and cloud resources.
 - Automating infrastructure provisioning and application deployment.
 - Troubleshooting issues involving identities, permissions, Docker, and Azure services.
+- Deploying and managing applications with Kubernetes and Helm.
+- Working with container registries, Kubernetes secrets, and deployment pipelines.
+- Building interactive frontend features using JavaScript, reusable functions, and event handling.
 
 An important part of the process was documenting not only what worked, but also what went wrong, how I solved it, and **what I learned along the way**.
 
@@ -63,19 +75,7 @@ The complete technical tutorial is available in Swedish:
 
 It covers the architecture, deployment process, security decisions, troubleshooting, and lessons learned.
 
-## Portfolio version
-
-This repository is a standalone copy of my original course project.
-
-GitHub Actions workflows are disabled in this portfolio repository to prevent unintended Azure deployments and costs. The workflow definitions remain in the repository as examples of the CI/CD implementation.
-
----
-
-*Stay calm and scale on.*
-
-**— Sture 🐧☁️**
-
-## How to run it
+## Deploy with Kubernetes and Helm
 
 1. Create the pull secret, with a GitHub token that has only `read:packages`. The first line waits for you to
    paste the token:

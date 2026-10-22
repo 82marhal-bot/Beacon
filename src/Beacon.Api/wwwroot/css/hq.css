@@ -135,3 +135,28 @@ transition:
     left: 65%;
     top: 21%;
 }
+
+.speech-bubble.panic-shout {
+    font-size: 24px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.office.panic-active::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 0, 0, 0.35);
+    pointer-events: none;
+    animation: panic-flash 0.5s ease-in-out 3;
+}
+
+@keyframes panic-flash {
+    0%, 100% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}

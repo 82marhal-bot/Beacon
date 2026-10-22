@@ -56,7 +56,8 @@ function showPengwinMessage(pengwin) {
     lastMessageIndex[pengwin] = randomIndex;
 
     // Uppdatera texten och visa bubblan.
-    bubble.textContent = lines[randomIndex];
+    bubble.classList.remove("panic-shout");
+bubble.textContent = lines[randomIndex];
     bubble.classList.add("visible");
 
     // Starta om just denna pingvins timer.
@@ -67,6 +68,65 @@ function showPengwinMessage(pengwin) {
     }, 3000);
 }
 
+function showFixedMessage(pengwin, message) {
+    const bubble = document.getElementById(`${pengwin}-message`);
+
+    clearTimeout(messageTimers[pengwin]);
+
+    bubble.textContent = message;
+    bubble.classList.add("visible");
+
+    messageTimers[pengwin] = setTimeout(() => {
+        bubble.classList.remove("visible");
+    }, 3000);
+}
+
+let panicTimers = [];
+
 function pressPanicButton() {
-    alert("🚨 PANIC BUTTON ACTIVATED! 🚨\n\nMajvor: GUNNAR!!!");
+    const bubble = document.getElementById("gunnar-message");
+    const office = document.querySelector(".office");
+
+    // Avbryt eventuella gamla reaktioner
+    panicTimers.forEach(clearTimeout);
+    panicTimers = [];
+
+    // Gunnar skriker direkt!
+    clearTimeout(messageTimers.gunnar);
+
+    bubble.textContent = "JAG TRYCKTE PÅ KNAPPEN!!! 🚨🚨🚨";
+    bubble.classList.add("visible", "panic-shout");
+
+    // Starta om det röda blinkandet
+    office.classList.remove("panic-active");
+    void office.offsetWidth;
+    office.classList.add("panic-active");
+
+    // De andra reagerar en efter en
+    panicTimers.push(setTimeout(() => {
+        showFixedMessage(
+            "sture",
+            "VEM GAV HONOM TILLGÅNG TILL KNAPPEN?!"
+        );
+    }, 800));
+
+    panicTimers.push(setTimeout(() => {
+        showFixedMessage(
+            "majvor",
+            "Har någon läst loggarna?!"
+        );
+    }, 1600));
+
+    panicTimers.push(setTimeout(() => {
+        showFixedMessage(
+            "bosse",
+            "...fem minuter till... zzz..."
+        );
+    }, 2400));
+
+    // Gunnar lugnar sig efter tre sekunder
+    messageTimers.gunnar = setTimeout(() => {
+        bubble.classList.remove("visible", "panic-shout");
+        office.classList.remove("panic-active");
+    }, 3000);
 }
