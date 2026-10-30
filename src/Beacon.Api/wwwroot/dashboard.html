@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Viral Panic Command Center</title>
+
+    <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+
+    <div class="app-shell">
+
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">VIRAL PANIC</p>
+                <h1>Command Center</h1>
+            </div>
+
+            <div class="system-badge">
+                <span class="status-dot"></span>
+                <span id="system-status">System online</span>
+            </div>
+            <a href="/" class="hq-link">
+    🐧 Back to Pengwin HQ
+</a>
+        </header>
+
+        <main class="dashboard">
+
+    <div class="dashboard-left">
+
+        <section class="sture-panel">
+                <img
+                    id="sture"
+                    src="/images/sture-calm.png"
+                    alt="Sture, Viral Panic mascot">
+
+                <div class="panic-copy">
+                    <p class="label">Panic level</p>
+                    <h2 id="panic-level">Loading...</h2>
+                    <p id="panic-message">Loading...</p>
+                </div>
+            </section>
+
+                    <section class="event-panel">
+            <div class="event-header">
+                <h2>📋 Event Log</h2>
+                <span class="event-live">● LIVE</span>
+            </div>
+
+            <ul id="event-log" class="event-log" aria-live="polite">
+                <li class="event-empty">
+                    Waiting for suspicious activity...
+                </li>
+            </ul>
+        </section>
+
+    </div>
+
+            <section class="status-panel">
+
+                <article class="status-card">
+                    <p class="label">System health</p>
+                    <p id="health-status" class="status-value">
+                        Loading...
+                    </p>
+                </article>
+
+                <article class="status-card">
+                    <p class="label">Current instance</p>
+                    <p id="instance-name" class="status-value">Loading...</p>
+
+                    <button id="send-request-button" class="request-button">
+                        Send request
+                    </button>
+                </article>
+
+                <article class="status-card">
+                    <p class="label">Last updated</p>
+                    <p id="last-updated" class="status-value">
+                        Waiting...
+                    </p>
+                </article>
+
+                <article class="status-card">
+                    <p class="label">Instance changes</p>
+                    <p id="instance-changes" class="status-value">0</p>
+                </article>
+
+                <article id="replica-card" class="status-card">
+                    <p class="label">Observed replicas</p>
+                    <p id="replica-count" class="status-value">0</p>
+                    <p id="replica-list" class="replica-list">
+                        Waiting for Sture...
+                    </p>
+                </article>
+
+                <article class="status-card">
+    <p class="label">Deployment information</p>
+
+    <div class="deployment-grid">
+        <div>
+            <p class="label">Version</p>
+            <p id="app-version" class="status-value">Loading...</p>
+        </div>
+
+        <div>
+            <p class="label">Environment</p>
+            <p id="app-environment" class="status-value">Loading...</p>
+        </div>
+
+        <div>
+            <p class="label">Config message</p>
+            <p id="config-message" class="deployment-detail">Loading...</p>
+        </div>
+
+        <div>
+            <p class="label">API key configured</p>
+            <p id="api-key-status" class="deployment-detail">Loading...</p>
+        </div>
+    </div>
+</article>
+
+            </section>
+
+        </main>
+
+        <footer id="footer-status" class="footer">
+            Everything is suspiciously fine.
+        </footer>
+
+    </div>
+
+    <script src="/js/site.js"></script>
+</body>
+</html>

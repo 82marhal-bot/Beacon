@@ -102,6 +102,9 @@ function pressPanicButton() {
     void office.offsetWidth;
     office.classList.add("panic-active");
 
+// 🪩 Fredagsdisco!
+startDisco();
+
     // De andra reagerar en efter en
     panicTimers.push(setTimeout(() => {
         showFixedMessage(
@@ -129,6 +132,32 @@ function pressPanicButton() {
         bubble.classList.remove("visible", "panic-shout");
         office.classList.remove("panic-active");
     }, 3000);
+}
+
+let discoTimer;
+
+function startDisco() {
+    const office = document.querySelector(".office");
+
+    if (!office) {
+        return;
+    }
+
+    // Respektera användarens inställning för minskad rörelse.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        return;
+    }
+
+    clearTimeout(discoTimer);
+
+    // Starta om animationen även vid upprepade knapptryck.
+    office.classList.remove("disco-active");
+    void office.offsetWidth;
+    office.classList.add("disco-active");
+
+    discoTimer = setTimeout(() => {
+        office.classList.remove("disco-active");
+    }, 2500);
 }
 
 async function updateHqStatus() {

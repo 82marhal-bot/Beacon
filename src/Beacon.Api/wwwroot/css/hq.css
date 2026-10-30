@@ -159,6 +159,16 @@ transition:
     animation: panic-flash 0.5s ease-in-out 3;
 }
 
+@keyframes panic-flash {
+    0%, 100% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
 /* ---------- Live system status ---------- */
 
 .hq-system-status {
@@ -205,12 +215,56 @@ transition:
     box-shadow: 0 0 12px #ff5c5c;
 }
 
-@keyframes panic-flash {
-    0%, 100% {
+/* 🪩 Friday Disco Panic */
+
+.office.disco-active {
+    position: relative;
+    isolation: isolate;
+}
+
+.office.disco-active::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+
+    background: linear-gradient(
+        120deg,
+        rgba(167, 139, 250, 0.3),
+        rgba(103, 232, 249, 0.3),
+        rgba(244, 114, 182, 0.3),
+        rgba(250, 204, 21, 0.3)
+    );
+
+    background-size: 300% 300%;
+    animation: disco-colors 2.5s ease-in-out;
+}
+
+@keyframes disco-colors {
+    0% {
+        background-position: 0% 50%;
         opacity: 0;
     }
 
-    50% {
+    20% {
         opacity: 1;
     }
+
+    80% {
+        opacity: 1;
+    }
+
+    100% {
+        background-position: 100% 50%;
+        opacity: 0;
+    }
 }
+
+@media (prefers-reduced-motion: reduce) {
+    .office.disco-active::before {
+        animation: none;
+        opacity: 0;
+    }
+}
+
