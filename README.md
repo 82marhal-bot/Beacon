@@ -225,3 +225,39 @@ Open `http://localhost:8080/info` to check the configuration. The response shoul
 ## Successful automated build and deploy
 
 A successful GitHub Actions run demonstrating automated build, push to GHCR, and deployment to AKS: [Release version 6](https://github.com/82marhal-bot/Beacon/actions/runs/39419602659).
+
+## Troubleshooting on Windows
+
+### kubectl cannot connect through host.docker.internal
+
+If `kubectl` times out when connecting to `https://host.docker.internal:PORT`, try connecting through localhost instead.
+
+First, check the selected context and its API server address:
+
+```bash
+kubectl config current-context
+kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}'
+```
+
+Use the port shown in that address. Replace `PORT` below with the actual number:
+
+```bash
+kubectl --server=https://127.0.0.1:PORT --tls-server-name=host.docker.internal --request-timeout=10s get nodes
+```
+
+This tests the connection without changing the saved configuration. The `--tls-server-name` option preserves certificate verification against `host.docker.internal`.
+
+If the command succeeds, find the cluster entry used by the current context:
+
+```bash
+kubectl config view --minify -o jsonpath='{.contexts[0].context.cluster}'
+```
+
+Replace `CLUSTER_NAME` and `PORT` below with the values you found, then save the working connection settings:
+
+```bash
+kubectl config set-cluster CLUSTER_NAME --server=https://127.0.0.1:PORT --tls-server-name=host.docker.internal
+kubectl get nodes
+```
+
+This updates only the named cluster entry in your local kubeconfig. It does not change resources inside the cluster.
