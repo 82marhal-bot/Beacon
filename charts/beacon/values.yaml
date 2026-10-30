@@ -1,3 +1,3 @@
 replicaCount: 3
-imageTag: "9087ef1"
+imageTag: "14983a9"
 ingressHost: ""
