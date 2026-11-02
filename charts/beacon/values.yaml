@@ -1,3 +1,4 @@
 replicaCount: 3
 imageTag: "14983a9"
 ingressHost: ""
+environment: "local"

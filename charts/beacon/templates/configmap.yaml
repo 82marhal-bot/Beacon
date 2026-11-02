@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: "{{ .Release.Name }}-config"
 data:
-  BEACON_ENVIRONMENT: "local"
+  BEACON_ENVIRONMENT: {{ .Values.environment | quote }}
   BEACON_MESSAGE: "Hello again!"

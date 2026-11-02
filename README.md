@@ -1,6 +1,6 @@
 # 🐧 Meet PengWin HQ
 
-Viral Panic has grown beyond its original dashboard into a small interactive penguin office.
+Viral Panic has grown beyond its original dashboard into a small interactive penguin office. 
 
 ## Meet the team
 
@@ -69,7 +69,7 @@ An important part of the process was documenting not only what worked, but also 
 
 ## Documentation
 
-The complete technical tutorial is available in Swedish:
+The complete technical tutorial made during the course *Scalable Cloud Applications* is available in Swedish:
 
 **[Read the tutorial (Svenska)](src/docs/TUTORIAL.md)**
 
