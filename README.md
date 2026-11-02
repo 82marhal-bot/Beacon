@@ -224,7 +224,7 @@ Open `http://localhost:8080/info` to check the configuration. The response shoul
 
 ## Successful automated build and deploy
 
-A successful GitHub Actions run demonstrating automated build, push to GHCR, and deployment to AKS: [Release version 6](https://github.com/82marhal-bot/Beacon/actions/runs/39419602659).
+A successful push-triggered workflow that builds the image, pushes it to GHCR, and automatically deploys it to AKS: [Configure deployment environment and restart pods on config changes](https://github.com/82marhal-bot/Beacon/actions/runs/41424235783).
 
 ## Troubleshooting on Windows
 
